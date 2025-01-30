@@ -1,0 +1,6 @@
+admissionController:
+  serviceMonitor:
+    enabled: true
+metricsConfig:
+  namespaces:
+    include: ["default"]
