@@ -32,8 +32,8 @@ Create a different runtime handler, called runsc (gvisor).
 ```bash
 kubectl get runtimeclass ## No resources found
 
-# Inspect the runtime class 0404_gvisor/runtimeclass.yaml and apply it
-kubectl apply -f 0404_gvisor/runtimeclass.yaml
+# Inspect the runtime class 18_gvisor/runtimeclass.yaml and apply it
+kubectl apply -f 18_gvisor/runtimeclass.yaml
 
 kubectl get runtimeclass
 ```
@@ -44,8 +44,8 @@ Create the pods with `gvisor` runtime class and default `runc` class:
 
 ```bash
 # Inspect the pods, pay attention to the field `runtimeClassName` and apply both pods
-kubectl apply -f 0404_gvisor/nginx-gvisor-pod.yaml
-kubectl apply -f 0404_gvisor/nginx-pod.yaml
+kubectl apply -f 18_gvisor/nginx-gvisor-pod.yaml
+kubectl apply -f 18_gvisor/nginx-pod.yaml
 ```
 
 ## Check if gVisor is working

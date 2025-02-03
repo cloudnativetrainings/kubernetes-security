@@ -4,10 +4,10 @@
 
 ```bash
 # inspect the auditing policy
-vi 0501_auditing/my-policy.yaml
+vi 21_auditing/my-policy.yaml
 
 # copy the policy file into the apiserver mount
-cp 0501_auditing/my-policy.yaml /root/apiserver/
+cp 21_auditing/my-policy.yaml /root/apiserver/
 
 # Enable Auditing in the API Server
 vi /etc/kubernetes/manifests/kube-apiserver.yaml

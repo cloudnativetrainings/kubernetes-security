@@ -2,10 +2,10 @@
 
 ```bash
 # inspect the kubebench job
-cat 0503_kube-bench/job.yaml
+cat 23_kube-bench/job.yaml
 
 # run kubebench
-kubectl apply -f 0503_kube-bench/job.yaml
+kubectl apply -f 23_kube-bench/job.yaml
 
 # inspect the logs of kubebench
 kubectl logs <KUBE_BENCH_POD>

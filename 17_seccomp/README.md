@@ -15,10 +15,10 @@ systemctl status kubelet
 ### Create custom profile
 
 ```bash
-cat 0403_seccomp/my-profile.json
+cat 17_seccomp/my-profile.json
 
 mkdir -p /var/lib/kubelet/seccomp/profiles
-cp 0403_seccomp/my-profile.json /var/lib/kubelet/seccomp/profiles/
+cp 17_seccomp/my-profile.json /var/lib/kubelet/seccomp/profiles/
 ```
 
 ## Verify Pod is allowed to write files

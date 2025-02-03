@@ -3,7 +3,7 @@
 In this lab you will setup an MLA stack for security.
 
 ```bash
-cd 0504_mla
+cd 24_mla
 ```
 
 ## Prometheus

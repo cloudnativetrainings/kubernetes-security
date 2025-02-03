@@ -34,10 +34,10 @@ kubectl exec -it my-suboptimal-pod -- ls -alh /tmp
 
 ```bash
 # inspect the apparmor profile
-cat 0402_apparmor/my-apparmor-profile
+cat 16_apparmor/my-apparmor-profile
 
 # copy the profile into the apparmor default profiles directory
-cp 0402_apparmor/my-apparmor-profile /etc/apparmor.d/
+cp 16_apparmor/my-apparmor-profile /etc/apparmor.d/
 
 # restart apparmor
 systemctl restart apparmor
