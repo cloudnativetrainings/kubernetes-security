@@ -15,13 +15,15 @@ verify:
 # TODO check lshttpd
 	echo "Training Environment successfully verified"
 
-.PHONY: get-external-ip
-get-external-ip:
-	gcloud compute instances describe kubernetes-security \
-		--format='get(networkInterfaces[0].accessConfigs[0].natIP)' \
-		--zone europe-west3-a
+# TODO
+# .PHONY: get-external-ip
+# get-external-ip:
+	# gcloud compute instances describe kubernetes-security \
+	# 	--format='get(networkInterfaces[0].accessConfigs[0].natIP)' \
+	# 	--zone europe-west3-a
 
-.PHONY: teardown
-teardown:
-	gcloud compute instances delete kubernetes-security --zone europe-west3-a --quiet
-	gcloud compute firewall-rules delete you-are-welcome --quiet
+# TODO
+# .PHONY: teardown
+# teardown:
+# 	gcloud compute instances delete kubernetes-security --zone europe-west3-a --quiet
+# 	gcloud compute firewall-rules delete you-are-welcome --quiet
