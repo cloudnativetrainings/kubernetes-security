@@ -1,12 +1,10 @@
 # Host Level Security with AppArmor
 
-## Install
+<!-- ## Install
 
 ## Verify installation
 
 ```bash
-# install
-apt-get install apparmor-utils --yes
 
 # check installation
 systemctl status apparmor
@@ -19,7 +17,7 @@ aa-status
 
 # inspect default profiles directory
 ls -alh /etc/apparmor.d/
-```
+``` -->
 
 ## Verify Pod is allowed to write files
 

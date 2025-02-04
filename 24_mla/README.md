@@ -69,13 +69,6 @@ kubectl run ancient-elasticsearch --image elasticsearch:6.8.21
 # Import trivy-operator Dashboard 17813
 # https://grafana.com/grafana/dashboards/17813-trivy-operator-dashboard/
 
-# install trivy cli
-apt-get install wget apt-transport-https gnupg lsb-release
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install trivy --yes
-
 # NSA compliance check via CLI
 trivy k8s --compliance=k8s-nsa-1.0 --report summary
 trivy k8s --compliance=k8s-nsa-1.0 --report all

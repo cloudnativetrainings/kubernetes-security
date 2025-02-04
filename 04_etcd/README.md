@@ -1,13 +1,5 @@
 # Encryption at Rest
 
-## Install etcdctl
-
-```bash
-apt install -y etcd-client
-```
-
-<!-- TODO avoid apt dialog -->
-
 ## Communication with etcd
 
 ```bash

@@ -3,9 +3,6 @@
 ## Installation
 
 ```bash
-# install
-apt-get install strace
-strace --version
 
 # strace something
 strace echo "foo"

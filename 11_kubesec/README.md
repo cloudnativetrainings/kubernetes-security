@@ -1,19 +1,5 @@
 # Static Analysis via Kubesec
 
-## Install Kubesec
-
-```bash
-# https://kubesec.io/
-
-# download and install kubesec
-wget https://github.com/controlplaneio/kubesec/releases/download/v2.14.2/kubesec_linux_amd64.tar.gz
-tar -xvf kubesec_linux_amd64.tar.gz
-sudo mv kubesec /usr/local/bin/
-
-# check if kubesec is installed on host level
-kubesec version
-```
-
 ## Run kubesec localy
 
 ```bash
