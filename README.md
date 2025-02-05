@@ -9,5 +9,5 @@ Copy the files `ssh-private-key` and `ssh-config` to your codespace.
 chmod 0400 ./ssh-private-key
 
 # Connect to your VM
-ssh -F ./ssh-config ks-hubert-01
+ssh -F ./ssh-config kubernetes-security-vm
 ```

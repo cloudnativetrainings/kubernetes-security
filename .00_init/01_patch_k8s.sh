@@ -5,8 +5,8 @@ set -euxo pipefail
 echo "================================================= Patch K8s Script"
 
 echo "================================================= Patch K8s Script - Apply Kubernetes Manifests"
-kubectl apply -f /root/pod.yaml
 kubectl create clusterrolebinding my-suboptimal-clusterrolebinding --clusterrole=cluster-admin --serviceaccount default:default
+kubectl apply -f /root/pod.yaml
 
 echo "================================================= Patch K8s Script - Patching Kubelet"
 mkdir -p /root/tmp
