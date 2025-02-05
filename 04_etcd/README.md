@@ -1,41 +1,30 @@
-# Encryption at Rest
+# Communication with etcd
 
-## Communication with etcd
+In this lab you will learn how to communicate with the etcd db and how to backup and restore it.
 
 ```bash
 # verify etcdctl is installed
-etcdctl --version
+etcdctl version
 
-# does not work
+# verify etcdctl can communicate via etcd cluster
 etcdctl member list
-
-# check how kube-apiserver talks to etcd
-cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep etcd
-ls -alh /etc/kubernetes/pki
-
-# try the verbose command
-ETCDCTL_API=3 etcdctl \
-  --cert /etc/kubernetes/pki/apiserver-etcd-client.crt \
-  --key /etc/kubernetes/pki/apiserver-etcd-client.key \
-  --cacert /etc/kubernetes/pki/etcd/ca.crt \
-  member list
 ```
 
-## Bring in some convenience into communication with etcd
+Note that communication is possible because of environment variables
 
 ```bash
-# add ETCD env vars to .trainingrc
-echo "export ETCDCTL_API=3" >> ~/.trainingrc
-echo "export ETCDCTL_ENDPOINTS=https://127.0.0.1:2379" >> ~/.trainingrc
-echo "export ETCDCTL_CACERT=/etc/kubernetes/pki/etcd/ca.crt" >> ~/.trainingrc
-echo "export ETCDCTL_KEY=/etc/kubernetes/pki/apiserver-etcd-client.key" >> ~/.trainingrc
-echo "export ETCDCTL_CERT=/etc/kubernetes/pki/apiserver-etcd-client.crt" >> ~/.trainingrc
-cat ~/.trainingrc
-source ~/.trainingrc
+# show ETCD environment variables
 env | grep ETCD
 
-# try communication again
-etcdctl member list
+# if those are not set you have to communicate like this with the etcd cluster
+ETCDCTL_API=3 etcdctl \
+ --cert /etc/kubernetes/pki/apiserver-etcd-client.crt \
+ --key /etc/kubernetes/pki/apiserver-etcd-client.key \
+ --cacert /etc/kubernetes/pki/etcd/ca.crt \
+ member list
+
+# you can get the values of those environment variables for example like this
+cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep etcd
 ```
 
 ## Get a value via etcdctl
@@ -44,7 +33,7 @@ etcdctl member list
 # write a value
 kubectl create cm my-cm --from-literal foo=bar
 
-#get the value
+# get the value
 etcdctl get /registry/configmaps/default/my-cm
 ```
 
@@ -52,13 +41,15 @@ etcdctl get /registry/configmaps/default/my-cm
 
 ```bash
 # create backup
-etcdctl snapshot save ~/etcd-backup.db
+etcdctl snapshot save ./etcd-backup.db
 
 # verify backup
-etcdctl --write-out=table snapshot status ~/etcd-backup.db
+etcdctl --write-out=table snapshot status ./etcd-backup.db
 
 # create a pod
 kubectl run my-nginx --image nginx
+
+# verify pod is running
 kubectl get pods
 ```
 
@@ -66,16 +57,20 @@ kubectl get pods
 
 ```bash
 # move all static manifests
-mv /etc/kubernetes/manifests/ ~/
+mkdir -p ./tmp/manifests/
+mv /etc/kubernetes/manifests/* ./tmp/manifests/
 # => kubernetes is not running now
 
+# move the old etcd data to some different directory
+mkdir -p ./tmp/etcd-old/
+mv /var/lib/etcd ./tmp/etcd-old
+
 # restore backup
-mv /var/lib/etcd ~/etcd-old
-etcdctl snapshot restore ~/etcd-backup.db --data-dir /var/lib/etcd/
+etcdctl snapshot restore ./etcd-backup.db --data-dir /var/lib/etcd/
 
 # move all static manifests back again
-mv  ~/manifests/ /etc/kubernetes/manifests/
+mv  ./tmp/manifests/* /etc/kubernetes/manifests/
 
-# ensure pod `my-nginx` is NOT running
+# ensure pod `my-nginx` is NOT running, due to it was created after the db got backuped
 kubectl get pods
 ```

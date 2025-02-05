@@ -1,5 +1,7 @@
 # Encryption of Etcd Backups
 
+In this lab you will learn about a problem about encrypted data in etcd and how to solve it.
+
 ## The Problem
 
 ```bash

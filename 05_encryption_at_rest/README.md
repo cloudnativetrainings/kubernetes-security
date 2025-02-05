@@ -1,5 +1,7 @@
 # Encryption at Rest
 
+In this lab you will learn how to encrypt secrets in the db.
+
 ## Get a secret from etcd
 
 ```bash

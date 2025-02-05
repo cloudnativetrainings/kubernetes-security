@@ -10,4 +10,7 @@ chmod 0400 ./ssh-private-key
 
 # Connect to your VM
 ssh -F ./ssh-config kubernetes-security-vm
+
+# Verify if everything is setup properly
+make verify
 ```

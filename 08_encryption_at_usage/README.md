@@ -3,6 +3,7 @@
 ## Create a Secret
 
 ```bash
+# note that the secret maybe already exists
 kubectl create secret generic my-secret --from-literal password=password123
 ```
 
@@ -15,7 +16,7 @@ kubectl get secret my-secret -o jsonpath='{.data.password}' | base64 -d
 
 ## Secret in Pod
 
-### Enable the secret within the Pod via the file `pod.yaml`
+Enable the secret within the Pod via the file `pod.yaml`
 
 ```yaml
 volumeMounts:
@@ -28,15 +29,11 @@ volumes:
       secretName: my-secret
 ```
 
-### Apply the Pod
-
 ```bash
+# apply the pod
 kubectl apply -f pod.yaml --force
-```
 
-### Show the Secret in plain text
-
-```bash
+# show the secret in plain text
 kubectl exec -it my-suboptimal-pod -- cat /secret/password
 ```
 
@@ -44,7 +41,7 @@ kubectl exec -it my-suboptimal-pod -- cat /secret/password
 
 ```bash
 # check the temp file systems on host level
-df | grep tmpfs | grep password
+df | grep tmpfs | grep secret-data
 
 # printout the sensitive data in plain text
 # eg cat /var/lib/kubelet/pods/c61079ab-eed7-4f79-b87b-b01c62e54d70/volumes/kubernetes.io~secret/secret-data/password
@@ -53,7 +50,20 @@ cat /var/lib/kubelet/pods/<POD-ID>/volumes/kubernetes.io~secret/secret-data/pass
 
 ## Secrets via ServiceAccount
 
+Enable automount of ServiceAccount Token in the file `pod.yaml`
+
+```yaml
+spec:
+  automountServiceAccountToken: true # <= enable automount of ServiceAccount Token
+```
+
 ```bash
+# re-enable the clusterrolebinding
+kubectl create clusterrolebinding my-suboptimal-clusterrolebinding --clusterrole=cluster-admin --serviceaccount default:default
+
+# apply the pod
+kubectl apply -f pod.yaml --force
+
 # store the token into an env variable
 TOKEN=$(kubectl exec -it my-suboptimal-pod -- cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 

