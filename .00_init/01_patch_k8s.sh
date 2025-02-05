@@ -4,10 +4,6 @@ set -euxo pipefail
 
 echo "================================================= Patch K8s Script"
 
-echo "================================================= Patch K8s Script - Apply Kubernetes Manifests"
-kubectl create clusterrolebinding my-suboptimal-clusterrolebinding --clusterrole=cluster-admin --serviceaccount default:default
-kubectl apply -f /root/pod.yaml
-
 echo "================================================= Patch K8s Script - Patching Kubelet"
 mkdir -p /root/tmp
 sed  's/    enabled: false/    enabled: true/g' /var/lib/kubelet/config.yaml > /root/tmp/kubelet-1.yaml
@@ -28,5 +24,11 @@ sed  '/  volumeMounts:/a \
     - name: lod-apiserver\
       mountPath: /apiserver' /root/tmp/apiserver-1.yaml > /root/tmp/apiserver-2.yaml
 mv /root/tmp/apiserver-2.yaml /etc/kubernetes/manifests/kube-apiserver.yaml
+# TODO should apiserver be restarted? => if so, wait until apiserver is ready
+
+echo "================================================= Patch K8s Script - Apply Kubernetes Manifests"
+kubectl create clusterrolebinding my-suboptimal-clusterrolebinding --clusterrole=cluster-admin --serviceaccount default:default
+kubectl wait --for=condition=Ready serviceaccount/default --timeout=60s
+kubectl apply -f /root/pod.yaml
 
 echo "================================================= Patch K8s Script - Finished Successfully"
