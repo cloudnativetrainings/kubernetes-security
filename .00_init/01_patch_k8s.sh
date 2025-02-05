@@ -24,11 +24,11 @@ sed  '/  volumeMounts:/a \
     - name: lod-apiserver\
       mountPath: /apiserver' /root/tmp/apiserver-1.yaml > /root/tmp/apiserver-2.yaml
 mv /root/tmp/apiserver-2.yaml /etc/kubernetes/manifests/kube-apiserver.yaml
-# TODO should apiserver be restarted? => if so, wait until apiserver is ready
+sleep 1m # wait until API-Server is ready
 
 echo "================================================= Patch K8s Script - Apply Kubernetes Manifests"
 kubectl create clusterrolebinding my-suboptimal-clusterrolebinding --clusterrole=cluster-admin --serviceaccount default:default
-kubectl wait --for=condition=Ready serviceaccount/default --timeout=60s
+sleep 2s # wait until SA is ready
 kubectl apply -f /root/pod.yaml
 
 echo "================================================= Patch K8s Script - Finished Successfully"
