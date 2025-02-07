@@ -4,11 +4,26 @@ set -euxo pipefail
 
 echo "================================================= Install Tools Script"
 
-echo "================================================= Install Tools Script - Install Tools"
+echo "================================================= Install Tools Script - Install kubens & kubectx"
 git clone https://github.com/ahmetb/kubectx /opt/kubectx
 # TODO pin version?
 ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
 ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+
+echo "================================================= Install Tools Script - Install krew"
+(
+  set -x; cd "$(mktemp -d)" &&
+  OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
+  ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
+  KREW="krew-${OS}_${ARCH}" &&
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" &&
+  tar zxvf "${KREW}.tar.gz" &&
+  ./"${KREW}" install krew
+)
+
+echo "================================================= Install Tools Script - Install openlitespeed"
+sudo wget -O - https://repo.litespeed.sh | sudo bash
+DEBIAN_FRONTEND=noninteractive apt-get install openlitespeed --yes
 
 echo "================================================= Install Tools Script - Install Helm"
 curl https://baltocdn.com/helm/signing.asc | apt-key add -

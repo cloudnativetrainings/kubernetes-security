@@ -1,41 +1,60 @@
 # Static Analysis via Kubesec
 
-## Run kubesec localy
+In this lab you will learn how to do scans of your manifests via kubesec.
+
+## Critical Issues
 
 ```bash
 # scan the pod yaml
 kubesec scan pod.yaml
+```
 
-# => fix critical stuff
-# => fix most of the advices
+You will get a json structure with a negative score like this:
 
-kubesec scan --help # => exit code for ci/cd
+```json
+"object": "Pod/my-suboptimal-pod.default",
+"valid": true,
+"fileName": "pod.yaml",
+"message": "Failed with a score of -37 points",
+"score": -37,
+"scoring": {
+    "critical": [
+    {
+        "id": "Privileged",
+        "selector": "containers[] .securityContext .privileged == true",
+        "reason": "Privileged containers can allow almost completely unrestricted host access",
+        "points": -30
+    },
+    {
+        "id": "AllowPrivilegeEscalation",
+        "selector": "containers[] .securityContext .allowPrivilegeEscalation == true",
+        "reason": "",
+        "points": -7
+    }
+    ],
+```
 
-# apply the changes
+Fix the critical issues. Afterwards run the scan again. You will get a score of zero.
+
+## Advisory Issues
+
+Fix some issues, eg
+
+- Do not run as root user
+- Enable resource requests and limits
+- Mount the host volume as read only
+
+Afterwards run the scan again. You will get a positive score.
+
+```bash
+# Apply the changes
 kubectl apply -f pod.yaml --force
 ```
 
-## Run kubesec localy as kubectl plugin
+## Run kubesec via kubectl plugin
 
 ```bash
-# https://krew.sigs.k8s.io/docs/user-guide/setup/install/
-# https://github.com/controlplaneio/kubectl-kubesec
-
-# install krew
-(
-  set -x; cd "$(mktemp -d)" &&
-  OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
-  ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
-  KREW="krew-${OS}_${ARCH}" &&
-  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" &&
-  tar zxvf "${KREW}.tar.gz" &&
-  ./"${KREW}" install krew
-)
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-kubectl krew --help
-
 # install kubesec-scan kubectl plugin
-# https://krew.sigs.k8s.io/plugins/
 kubectl krew search kubesec-scan
 kubectl krew install kubesec-scan
 
@@ -45,30 +64,6 @@ kubectl krew list
 kubectl plugin list
 cat ~/.krew/receipts/kubesec-scan.yaml
 
-# hint to sniff / wireshark
-
-# scan running pod
+# scan running pod, note that now the running pod gets scanned
 kubectl kubesec-scan pod my-suboptimal-pod
-```
-
-## Run as Admission Webhook
-
-```bash
-# https://artifacthub.io/packages/helm/kubesec/kubesec
-
-helm repo add kubesec https://abarrak.github.io/kubesec-helm
-helm repo ls
-helm repo update
-
-helm --namespace kubesec --create-namespace --atomic upgrade --install \
-  kubesec-scanner kubesec/kubesec --set mode=cron
-
-# TODO does not work
-
-```
-
-## Run as Cronjob
-
-```bash
-# TODO
 ```

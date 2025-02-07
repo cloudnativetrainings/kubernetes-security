@@ -1,14 +1,24 @@
 # container image signing
+
 => visualization of image scanning with registry, dev notebook,...
 
 # slides csi driver is not in alpha anymore
 
-PSP 
+PSP
 Volumes: ['*']
 not capitalized
 
 ## psp
+
 https://kubernetes.io/docs/concepts/security/pod-security-admission/
 
 ## secrets
+
 fix the order of the slides -> confusing
+
+# TODO slides https://github.com/kyverno/policies/
+
+# TODO falco
+
+show supported fields => https://falco.org/docs/reference/rules/supported-fields/
+=> change prio from NOTICE to WARNING

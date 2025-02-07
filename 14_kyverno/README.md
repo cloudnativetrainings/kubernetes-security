@@ -3,8 +3,6 @@
 ## Installation
 
 ```bash
-# https://artifacthub.io/packages/helm/kyverno/kyverno
-
 # install
 helm repo add kyverno https://kyverno.github.io/kyverno/
 helm repo update
@@ -12,13 +10,12 @@ helm --namespace kyverno --create-namespace --atomic --debug \
   upgrade --install \
   kyverno kyverno/kyverno --version v3.3.3
 
-# verify
+# verify installation
 helm list -n kyverno
-```
 
-## Inspect installation
+# take a look at the new resources
+kubectl api-resources | grep kyverno
 
-```bash
 # check webhooks
 kubectl get validatingwebhookconfigurations
 
@@ -33,9 +30,6 @@ kubectl -n kyverno get deployment
 ```bash
 # inspect the cluster policy
 cat 14_kyverno/disallow-latest-tag.yaml
-
-# show policies repo
-# https://github.com/kyverno/policies/
 
 # apply the cluster policy
 kubectl apply -f 14_kyverno/disallow-latest-tag.yaml
@@ -70,7 +64,7 @@ kubectl get clusterpolicies.kyverno.io
 # pod is still running
 kubectl get pods
 
-# check reports
+# check reports, note that the report has result `fail`
 kubectl get policyreports
 kubectl describe policyreports <REPORT>
 ```
@@ -78,5 +72,5 @@ kubectl describe policyreports <REPORT>
 ## Cleanup
 
 ```bash
-helm --namespace kyverno delete kyverno --debug
+helm --namespace kyverno delete kyverno
 ```

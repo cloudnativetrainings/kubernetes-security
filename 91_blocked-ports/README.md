@@ -1,5 +1,7 @@
 # Extra Materials
 
+In this lab you will learn how to get rid of an application blocking a specific port.
+
 ## Blocked Ports
 
 ```bash
@@ -18,6 +20,5 @@ netstat -tulpan | grep 8088
 
 # get & remove package
 apt list | grep -i openlitespeed
-apt remove openlitespeed
+apt remove openlitespeed -y
 ```
-

@@ -38,7 +38,7 @@ spec:
         - --encryption-provider-config=/apiserver/encryption-config.yaml # <= add this line
 ```
 
-Note that the kubelet is restarting the apiserver due to we changed the pod in the static pod manifests. This will take ~ 2 minutes. The Kubernetes Cluster is not reachable until the apiserver has been restarted. You can check the progress via `crictl ps | grep kube-apiserver`.
+> Note that the kubelet is restarting the apiserver due to we changed the pod in the static pod manifests. This will take ~ 2 minutes. The Kubernetes Cluster is not reachable until the apiserver has been restarted. You can check the progress via `crictl ps | grep kube-apiserver`.
 
 ## Verify Encryption
 

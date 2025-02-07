@@ -14,6 +14,9 @@ grep -qxF "source $TRAINING_RC_FILE" ~/.bashrc || echo "source $TRAINING_RC_FILE
 # add kubernetes bash completion
 echo "source <(kubectl completion bash)" >> $TRAINING_RC_FILE
 
+# add krew to path
+echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> $TRAINING_RC_FILE
+
 # set useful env vars
 echo "export IP=$(hostname -i)" >> $TRAINING_RC_FILE
 echo "export API_SERVER=https://$(hostname -i):6443" >> $TRAINING_RC_FILE

@@ -1,6 +1,11 @@
 .PHONY: verify
 verify:
 	cat /var/log/cloud-init-output.log | grep "CloudInit Finished Successfully"
+	test -f /root/.trainingrc
+	kubectx
+	kubens
+	kubectl krew version
+	netstat -tulpan | grep 8088 # check if openlitespeed is blocking port 8088
 	containerd --version
 	kubelet --version
 	kubeadm version

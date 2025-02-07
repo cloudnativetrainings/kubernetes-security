@@ -1,5 +1,7 @@
 # Runtime Security with Falco
 
+In this lab you will learn how to log users connecting to containers.
+
 ## Configure Falco
 
 Edit the Falco configuration file
@@ -23,11 +25,12 @@ file_output:
 # verify no logs
 cat /var/log/falco.log
 
-# exec into the pod (and exit afterwards)
+# exec into the pod
 kubectl exec -it my-suboptimal-pod -- bash
+exit
 
 # verify that a line like this got logged
-cat /var/log/falco.log 
+cat /var/log/falco.log
 ```
 
 ## Configure Rules
@@ -36,18 +39,16 @@ cat /var/log/falco.log
 # check falco dir
 ls -alh /etc/falco
 
-# find rule
+# find rule called "Terminal shell in container"
 vi /etc/falco/falco_rules.yaml
 
-# adapt rule
-vi /etc/falco/falco_rules.local.yaml 
+# copy rule into the following file and change the priority from NOTICE towards WARNING
+vi /etc/falco/falco_rules.local.yaml
 
-# show supported fields => https://falco.org/docs/reference/rules/supported-fields/
-# => change prio from NOTICE to WARNING
-
-# exec into the pod (and exit afterwards)
+# exec into the pod
 kubectl exec -it my-suboptimal-pod -- bash
+exit
 
 # verify that a line like this got logged
-cat /var/log/falco.log 
+cat /var/log/falco.log
 ```

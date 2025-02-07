@@ -1,23 +1,6 @@
 # Host Level Security with AppArmor
 
-<!-- ## Install
-
-## Verify installation
-
-```bash
-
-# check installation
-systemctl status apparmor
-
-# check apparmor is enabled
-cat /sys/module/apparmor/parameters/enabled
-
-# see status of apparmor - see all loaded profiles
-aa-status
-
-# inspect default profiles directory
-ls -alh /etc/apparmor.d/
-``` -->
+In this lab you will learn how to use apparmor to limit the permissions of a container on host level.
 
 ## Verify Pod is allowed to write files
 
@@ -31,6 +14,9 @@ kubectl exec -it my-suboptimal-pod -- ls -alh /tmp
 ### Add AppArmor Profile
 
 ```bash
+# verify the profile is not engaged yet
+aa-status | grep my-apparmor-profile
+
 # inspect the apparmor profile
 cat 16_apparmor/my-apparmor-profile
 
@@ -49,7 +35,6 @@ aa-status | grep my-apparmor-profile
 Enable the apparmor annotation in the file `pod.yaml`
 
 ```yaml
-
 ---
 metadata:
   name: my-suboptimal-pod
@@ -74,5 +59,5 @@ kubectl exec my-suboptimal-pod -- touch /tmp/some.file
 
 ```bash
 # uncomment apparmor profile in pod
-kubectl apply -f pod.yaml
+kubectl apply -f pod.yaml --force
 ```
