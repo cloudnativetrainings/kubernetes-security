@@ -1,6 +1,5 @@
 serviceMonitor:
   enabled: true
-  # labels: { release": "prometheus" }
 trivy:
   ignoreUnfixed: true
 targetNamespaces: "default"

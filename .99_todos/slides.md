@@ -22,3 +22,13 @@ fix the order of the slides -> confusing
 
 show supported fields => https://falco.org/docs/reference/rules/supported-fields/
 => change prio from NOTICE to WARNING
+
+# MLA
+
+# Search Grafana trivy-operator dashboards
+
+# https://grafana.com/grafana/dashboards/?dataSource=prometheus&search=trivy-operator
+
+# Import trivy-operator Dashboard 17813
+
+# https://grafana.com/grafana/dashboards/17813-trivy-operator-dashboard/

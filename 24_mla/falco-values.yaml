@@ -2,11 +2,4 @@ falco:
   grpc:
     enabled: true
   grpc_output:
-    enabled: true  
-#   metrics:
-#     enabled: true
-#   webserver:
-#     enabled: true
-#     prometheus_metrics_enabled: true
-# serviceMonitor:
-#   create: true
+    enabled: true

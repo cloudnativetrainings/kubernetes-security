@@ -29,3 +29,7 @@ ps aux | grep my-suboptimal-pod
 strace -p <PID> -f
 strace -p <PID> -f -cw
 ```
+
+# install yq and make use of it in mla
+
+Run an NSA compliance check

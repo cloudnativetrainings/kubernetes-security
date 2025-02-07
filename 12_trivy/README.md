@@ -84,6 +84,19 @@ helm --namespace trivy --create-namespace --atomic --debug \
 helm -n trivy get values trivy-operator
 ```
 
+## Run an NSA compliance check
+
+```bash
+# run nsa compliance check
+trivy k8s --compliance=k8s-nsa-1.0 --report summary
+trivy k8s --compliance=k8s-nsa-1.0 --report all
+trivy k8s --compliance=k8s-nsa-1.0 --report all --output cis-report.json
+
+# get the results from kubernetes
+kubectl get clustercompliancereport
+kubectl get clustercompliancereport k8s-nsa-1.0 -o yaml
+```
+
 ## Cleanup
 
 ```bash
