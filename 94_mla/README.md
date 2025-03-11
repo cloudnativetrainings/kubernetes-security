@@ -4,7 +4,7 @@ In this lab you will setup an MLA stack for security.
 
 ```bash
 # switch into the right directory
-cd 24_mla
+cd 94_mla
 ```
 
 ## Prometheus
