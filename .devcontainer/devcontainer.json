@@ -1,6 +1,6 @@
 {
   "name": "Kubernetes Security Training Labs",
-  "image": "quay.io/kubermatic-labs/training-ghcs-kubernetes-security-trainee-environment:1.0.0",
+  "image": "quay.io/kubermatic-labs/training-ghcs-trainee-environment:1.0.3",
   "customizations": {
     "vscode": {
       "settings": {
