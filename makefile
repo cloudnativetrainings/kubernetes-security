@@ -2,6 +2,7 @@
 verify:
 	cat /var/log/cloud-init-output.log | grep "CloudInit Finished Successfully"
 	test -f /root/.trainingrc
+	grep "source /root/.trainingrc" /root/.bashrc
 	kubectx
 	kubens
 	kubectl krew version
