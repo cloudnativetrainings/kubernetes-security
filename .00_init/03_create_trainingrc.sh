@@ -4,8 +4,9 @@ TRAINING_RC_FILE=/root/.trainingrc
 
 set -euxo pipefail
 
-# add kubernetes bash completion
-echo "source <(kubectl completion bash)" >> $TRAINING_RC_FILE
+# manage bashrc file
+echo "source <(kubectl completion bash)" >> /root/.bashrc
+echo "source /root/.trainingrc" >> /root/.bashrc
 
 # add krew to path
 echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> $TRAINING_RC_FILE
